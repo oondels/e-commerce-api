@@ -77,7 +77,6 @@ npm run dev
 
 **Hendrius Félix**  
 Back-End Developer | IoT Enthusiast  
-[LinkedIn](https://www.linkedin.com/) *(add your link)*
 
 ---
 
