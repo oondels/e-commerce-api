@@ -1,7 +1,10 @@
 import express, { Request, Response, NextFunction } from "express"
 import { AppDataSource } from "./database/data-source"
-import { productRoute } from "./modules/products/products.route";
 import { AppError } from "./util/AppError";
+import { productRoute } from "./modules/products/products.route";
+import { userRoute } from "./modules/user/users.route";
+import { authRoute } from "./modules/user/auth.route";
+import cookieParser from "cookie-parser"
 // import cors from "cors"
 
 AppDataSource.initialize()
@@ -17,7 +20,10 @@ const port = 2321
 
 // app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 app.use("/api/products/", productRoute)
+app.use("/api/users/", userRoute)
+app.use("/api/auth/", authRoute)
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: "Ecommerce api running!" })
