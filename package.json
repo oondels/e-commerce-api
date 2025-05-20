@@ -4,7 +4,7 @@
   "description": "A modern, scalable backend for a full-featured e-commerce platform built with **TypeScript**, **Express**, **PostgreSQL**, and **RabbitMQ**. Designed for extensibility, real-time capabilities, and integration with a physical store.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,19 @@
   },
   "homepage": "https://github.com/oondels/e-commerce-api#readme",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "joi": "^17.13.3",
+    "typeorm": "^0.3.24"
   }
 }
