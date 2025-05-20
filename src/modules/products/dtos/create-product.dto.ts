@@ -1,6 +1,5 @@
 import Joi from "joi";
 
-// Schema base para criação
 export const productSchema = Joi.object({
   name: Joi.string().min(1).required().messages({
     "string.empty": "Nome é obrigatório.",

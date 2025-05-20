@@ -7,13 +7,6 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "baseUrl": "./src",
-    "paths": {
-      "@modules/*": ["modules/*"],
-      "@shared/*": ["shared/*"],
-      "@config/*": ["shared/config/*"],
-      "@database/*": ["shared/database/*"],
-      "@middlewares/*": ["shared/middlewares/*"]
-    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
