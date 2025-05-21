@@ -2,12 +2,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  JoinColumn,
 } from "typeorm"
 
 @Entity({ schema: "core", name: "products" })
@@ -18,13 +15,13 @@ export class Product {
   @Column('text')
   name!: string
 
-  @Column('text')
+  @Column('text', { nullable: true })
   description?: string
 
   @Column('int', { default: 0 })
   stock!: number
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'int', nullable: true, default: 0 })
   minimumStock?: number;
 
   @Column({ type: 'int', nullable: true })

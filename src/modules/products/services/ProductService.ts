@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../database/data-source";
-import { Repository } from "typeorm";
+import { Repository, DataSource } from "typeorm";
 import { Product } from "../models/Product";
 import { AppError } from "../../../util/AppError";
 

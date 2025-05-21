@@ -4,11 +4,16 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  Index
 } from 'typeorm'
+import {Order} from "../../orders/models/Order"
 
 export type UserRole = 'user' | 'admin' | 'employee'
 
 @Entity({ schema: 'auth', name: 'users' })
+@Index(["email"])
+@Index(["username"])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string
@@ -60,4 +65,7 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt!: Date
+
+  @OneToMany(() => Order, order => order.user)
+  orders!: Order[]
 }

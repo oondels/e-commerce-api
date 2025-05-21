@@ -4,6 +4,7 @@ import { AppError } from "./util/AppError";
 import { productRoute } from "./modules/products/products.route";
 import { userRoute } from "./modules/user/users.route";
 import { authRoute } from "./modules/auth/auth.route";
+import { orderRoute } from "./modules/orders/orders.route";
 import cookieParser from "cookie-parser"
 import logger from "./util/logger"
 import { connectRedis } from "./config/redisCLient"
@@ -28,6 +29,7 @@ app.use(cookieParser())
 app.use("/api/products/", productRoute)
 app.use("/api/users/", userRoute)
 app.use("/api/auth/", authRoute)
+app.use("/api/orders/", orderRoute)
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: "Ecommerce api running!" })
