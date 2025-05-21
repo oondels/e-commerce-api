@@ -1,5 +1,6 @@
 import { ProductService } from "../services/ProductService";
-import { Router, Request, Response, NextFunction } from "express"
+import { Request, Response, NextFunction } from "express"
+import { AppError } from "../../../util/AppError";
 
 const productService = new ProductService()
 export class ProductController {
