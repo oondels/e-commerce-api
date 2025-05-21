@@ -3,16 +3,20 @@ import { AppDataSource } from "./database/data-source"
 import { AppError } from "./util/AppError";
 import { productRoute } from "./modules/products/products.route";
 import { userRoute } from "./modules/user/users.route";
-import { authRoute } from "./modules/user/auth.route";
+import { authRoute } from "./modules/auth/auth.route";
 import cookieParser from "cookie-parser"
+import logger from "./util/logger"
+import { connectRedis } from "./config/redisCLient"
 // import cors from "cors"
 
 AppDataSource.initialize()
   .then(() => {
-    console.log("Database connected successfully!");
+    logger.info("Database", "Database connected successfully!");
 
+    // Initialize Redis connection
+    connectRedis()
   }).catch(error => {
-    console.error("Error connecting to database.", error);
+    logger.error("Database", "Error connecting to database: " + error);
   })
 
 const app = express()
@@ -30,7 +34,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 })
 
 app.listen(port, () => {
-  console.log("App running on port: ", port);
+  logger.info("Server", `Server running on port ${port}`)
 })
 
 // Error handling

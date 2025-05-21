@@ -12,6 +12,10 @@ const envVariablesSchema = Joi.object({
   DB_PORT: Joi.string().default("5432"),
   DB_USER: Joi.string().required(),
   JWT_SECRET: Joi.string().required(),
+  REDIS_HOST: Joi.string().required(),
+  REDIS_PORT: Joi.string().default("6379"),
+  REDIS_PASSWORD: Joi.string().default(""),
+  JWT_SECRET_REFRESH: Joi.string().default(""),
 });
 
 export const config = {
@@ -21,6 +25,10 @@ export const config = {
   DB_PORT: process.env.DB_PORT || "5432",
   DB_USER: process.env.DB_USER,
   JWT_SECRET: process.env.JWT_SECRET,
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT || "6379",
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD || "",
+  JWT_SECRET_REFRESH: process.env.JWT_SECRET_REFRESH
 }
 
 const { error } = envVariablesSchema.validate(config, { abortEarly: false })
