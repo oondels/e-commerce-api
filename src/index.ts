@@ -29,7 +29,7 @@ app.use(cookieParser())
 app.use("/api/products/", productRoute)
 app.use("/api/users/", userRoute)
 app.use("/api/auth/", authRoute)
-app.use("/api/orders/", orderRoute)
+app.use("/api/orders", orderRoute)
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: "Ecommerce api running!" })
@@ -47,7 +47,8 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   }
 
   // Unexpected Errors
-  console.error(`Erro no metodo ${req.method} na rota ${req.originalUrl}:`, error);
+  console.error(`Erro no metodo ${req.method} na rota ${req.originalUrl}:`);
+  
   res.status(500).json({
     message: "Erro interno no servidor. Contate a equipe de suporte.",
     error: process.env.NODE_ENV === "development" ? error.message : undefined

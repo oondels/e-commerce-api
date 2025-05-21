@@ -6,6 +6,7 @@ import { Product } from "../../products/models/Product"
 import { User } from "../../user/models/User"
 import { AppError } from "../../../util/AppError"
 import logger from "../../../util/logger"
+import { OrderStatus } from "../models/Order"
 
 export interface CreateOrderDto {
   user: string
@@ -72,5 +73,69 @@ export class OrderService {
       }
 
     })
+  }
+
+  async getAllOrders(userId: string) {
+    // const user = await this.userRepository.findOne({ where: { id: userId } })
+    // if (!user) throw new AppError("Usuário não encontrado ou inativo.", 404)
+      
+    // if (user.role !== 'admin') throw new AppError("Você não tem permissões para acessar esta funcionalidade.", 403)
+
+    const orders = await this.orderRepository.find({
+      relations: ['items', 'items.product'],
+      order: { createdAt: 'DESC' }
+    })
+
+    return orders
+  }
+
+  async getUserOrders(userId: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } })
+    if (!user) throw new AppError("Usuário não encontrado ou inativo.", 404)
+
+    const orders = await this.orderRepository.find({
+      where: { user: { id: userId } },
+      relations: ['items', 'items.product']
+    })
+
+    return orders
+  }
+
+  async getOrderById(orderId: string) {
+    const order = await this.orderRepository.findOne({
+      where: { id: orderId },
+      relations: ['items', 'items.product']
+    })
+    if (!order) throw new AppError("Pedido não encontrado!", 404)
+
+    return order
+  }
+
+  async updateOrderStatus(orderId: string, status: OrderStatus) {
+    const order = await this.getOrderById(orderId)
+
+    order.status = status
+    try {
+      await this.orderRepository.save(order)
+    } catch (error) {
+      logger.error("Order", "Erro ao atualizar status do pedido: " + error)
+      throw new AppError(`Erro ao atualizar status do pedido ${orderId}`, 500)
+    }
+  }
+
+  async cancelOrder(id: string) {
+    const user = this.userRepository.findOne({ where: { id } })
+    if (!user) throw new AppError("Usuário não encontrado ou inativo.", 404)
+
+    const order = await this.getOrderById(id)
+    // TODO: Futuramente implementar lógica de Refund
+    if (order.status !== 'pending') throw new AppError("Não é possível cancelar este pedido!")
+
+    order.status = 'cancelled'
+    try {
+      await this.orderRepository.save(order)
+    } catch (error) {
+      throw new AppError(`Erro cancelar pedido ${id}`, 500)
+    }
   }
 }
