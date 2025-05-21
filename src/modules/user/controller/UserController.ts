@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { UserService } from "../services/UserService"
 import { AuthService } from "../services/AuthService"
+import { AppError } from "../../../util/AppError"
 
 const userService = new UserService()
 const authService = new AuthService()

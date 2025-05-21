@@ -17,7 +17,7 @@ export class AuthService {
     const user = await this.userRepository.findOne({
       where: [
         { email },
-        { username: username.toLowerCase() }
+        { username: username?.toLowerCase() }
       ]
     })
 
@@ -33,6 +33,7 @@ export class AuthService {
     const payload = {
       id: user.id,
       email: user.email,
+      name: user.name,
       username: user.username,
       role: user.role
     }

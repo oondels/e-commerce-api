@@ -35,18 +35,15 @@ app.listen(port, () => {
 
 // Error handling
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(`Erro no metodo ${req.method} na rota ${req.originalUrl}:`, error);
-  let message = "Erro interno no servidor. Contate a equipe de suporte."
-
   if (error instanceof AppError) {
-    message = error.message
-    res.status(error.statusCode).json({ message })
+    res.status(error.statusCode).json({ message: error.message })
     return
   }
 
   // Unexpected Errors
+  console.error(`Erro no metodo ${req.method} na rota ${req.originalUrl}:`, error);
   res.status(500).json({
-    message: message,
+    message: "Erro interno no servidor. Contate a equipe de suporte.",
     error: process.env.NODE_ENV === "development" ? error.message : undefined
   });
 })
