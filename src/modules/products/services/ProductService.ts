@@ -1,13 +1,17 @@
 import { AppDataSource } from "../../../database/data-source";
 import { Repository, DataSource } from "typeorm";
 import { Product } from "../models/Product";
+import { Category } from "../models/Category";
 import { AppError } from "../../../util/AppError";
+import { CreateProductDto } from "../dtos/create-product.dto";
 
 export class ProductService {
   private productRepository: Repository<Product>
+  private categoryRepository: Repository<Category>
 
   constructor() {
     this.productRepository = AppDataSource.getRepository(Product)
+    this.categoryRepository = AppDataSource.getRepository(Category)
   }
 
   async createProduct(data: Product) {
@@ -16,7 +20,15 @@ export class ProductService {
       throw new AppError("Produto já cadastrado com este nome.", 400)
     }
 
+    const categoryId = data.categoryId as unknown as string
+    const category = await this.categoryRepository.findOne({ where: { id: categoryId } })
+    if (!category) {
+      throw new AppError("Categoria não encontrada. Registre uma nova categoria antes de continuar.", 404)
+    }
+
+    data.categoryId = category 
     const product = this.productRepository.create(data)
+
     await this.productRepository.save(product)
     return product
   }

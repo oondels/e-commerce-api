@@ -1,6 +1,5 @@
 import { ProductService } from "../services/ProductService";
 import { Request, Response, NextFunction } from "express"
-import { AppError } from "../../../util/AppError";
 
 const productService = new ProductService()
 export class ProductController {

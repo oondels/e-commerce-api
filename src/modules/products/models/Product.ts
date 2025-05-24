@@ -5,8 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
 } from "typeorm"
+import { Category } from "./Category"
 
+// TODO: Add a field to 'Related Products' to store the relationship with the product
+// TODO: Add a filed to 'Product Variants'
 @Entity({ schema: "core", name: "products" })
 export class Product {
   @PrimaryGeneratedColumn("uuid")
@@ -17,6 +21,15 @@ export class Product {
 
   @Column('text', { nullable: true })
   description?: string
+
+  @Column('text', { nullable: true })
+  shortDescription?: string
+
+  @ManyToOne(() => Category, (category) => category.products, { nullable: false })
+  categoryId!: Category
+
+  @Column('jsonb', { nullable: true })
+  tags?: string[]
 
   @Column('int', { default: 0 })
   stock!: number
@@ -39,14 +52,26 @@ export class Product {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   costPrice!: number;
 
-  @Column({ default: true })
-  isActive!: boolean;
-
   @Column({ type: 'jsonb', nullable: true })
   images?: string[];
 
   @Column('text')
   userCreate!: string
+
+  @Column({ default: true })
+  isActive!: boolean;
+
+  @Column('boolean', { default: false })
+  isFeatured!: boolean
+
+  @Column('boolean', { default: false })
+  isNew!: boolean
+
+  @Column('boolean', { default: false })
+  isTrending!: boolean
+
+  @Column('boolean', { default: false })
+  isOnSale!: boolean
 
   @DeleteDateColumn()
   deletedAt?: Date;

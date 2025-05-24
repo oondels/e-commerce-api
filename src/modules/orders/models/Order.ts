@@ -13,6 +13,7 @@ import { OrderItem } from "./OrderItem"
 
 export type OrderStatus = 'pending' | 'paid' | 'cancelled'
 
+// TODO: Make a relationship with products
 @Entity({ schema: "core", name: "orders" })
 export class Order {
   @PrimaryGeneratedColumn('uuid')

@@ -4,6 +4,7 @@ import { Product } from "../modules/products/models/Product";
 import { User } from "../modules/user/models/User";
 import { Order } from "../modules/orders/models/Order";
 import { OrderItem } from "../modules/orders/models/OrderItem";
+import { Category } from "../modules/products/models/Category";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: process.env.NODE_ENV === 'development',
   logging: false,
-  entities: [Product, User, Order, OrderItem],
+  entities: [Product, Category, User, Order, OrderItem],
   subscribers: [],
   migrations: [],
 })
