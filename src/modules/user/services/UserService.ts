@@ -28,7 +28,11 @@ export class UserService {
 
     try {
       await this.userRepository.save(user);
-      return user;
+      return {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+      };
     } catch (error) {
       console.error("Erro ao criar usuário: ", error);
       throw new AppError("Erro ao criar usuário");

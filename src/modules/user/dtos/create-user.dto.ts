@@ -18,6 +18,11 @@ export const userSchema = Joi.object({
     "any.required": "Senha é obrigatória.",
   }),
 
+  confirmPassword: Joi.string().min(6).required().messages({
+    "string.min": "A senha deve ter no mínimo 6 caracteres.",
+    "any.required": "Senha é obrigatória.",
+  }),
+
   role: Joi.string().valid("user", "admin", "employee").default("user"),
 
   phone: Joi.string().optional(),

@@ -7,6 +7,7 @@ import bcrypt from "bcrypt"
 import { config } from "../../../config/dotenv"
 import { redis } from "../../../config/redisCLient"
 import crypto from "crypto"
+import { warn } from "console";
 
 export class AuthService {
   private userRepository: Repository<User>;
@@ -33,7 +34,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       name: user.name,
-      username: user.username,
+      username: user?.username || "",
       role: user.role
     }
 
@@ -63,12 +64,14 @@ export class AuthService {
     })
   }
 
-  async loginUser(username: string, email: string, password: string) {
+  async loginUser(emailUser: string, password: string) {
+    let isEmail = false;
+    if (emailUser.includes("@")) {
+      isEmail = true;
+    }
+
     const user = await this.userRepository.findOne({
-      where: [
-        { email },
-        { username: username?.toLowerCase() }
-      ]
+      where: [isEmail ? { email: emailUser } : { username: emailUser }],
     })
 
     if (!user) {
@@ -84,6 +87,12 @@ export class AuthService {
     const newJti = crypto.randomUUID()
     const refreshToken = await this.generateRefreshToken(user.id, newJti)
 
-    return { token, refreshToken }
+    return {
+      token, refreshToken, user: {
+        id: user.id,
+        role: user?.role,
+        name: user?.name
+      }
+    }
   }
 }
