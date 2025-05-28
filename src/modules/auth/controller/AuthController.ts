@@ -35,21 +35,16 @@ export class AuthController {
   static async logout(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.cookies
 
-    try {
-      if (refreshToken) {
-        const payload = await authService.verifyRefreshToken(refreshToken)
-        // Add the token to the blacklist
-        await authService.addTokenToBlacklist(payload)
-      }
+    const payload = await authService.verifyRefreshToken(refreshToken)
+    // Add the token to the blacklist
+    await authService.addTokenToBlacklist(payload)
 
-      res.clearCookie("token")
-      res.clearCookie("refreshToken")
+    res.clearCookie("token")
+    res.clearCookie("refreshToken")
 
-      res.status(200).json({ message: "Logout realizado com sucesso." })
-    } catch (error) {
-      res.status(400).json({ error: 'Credenciais inválidas.' })
-    }
+    res.status(200).json({ message: "Logout realizado com sucesso." })
   }
+
 
   static async refreshToken(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.cookies

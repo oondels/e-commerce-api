@@ -7,7 +7,6 @@ import bcrypt from "bcrypt"
 import { config } from "../../../config/dotenv"
 import { redis } from "../../../config/redisCLient"
 import crypto from "crypto"
-import { warn } from "console";
 
 export class AuthService {
   private userRepository: Repository<User>;
@@ -84,6 +83,7 @@ export class AuthService {
     }
 
     const token = await this.generateToken(user)
+    
     const newJti = crypto.randomUUID()
     const refreshToken = await this.generateRefreshToken(user.id, newJti)
 

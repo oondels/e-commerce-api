@@ -8,20 +8,20 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
   const token = req.cookies.token
 
   if (!token) {
-    throw new AppError("Acesso negado! Faça login para ter acesso.", 401)
+    return next(new AppError("Acesso negado! Faça login para ter acesso.", 401))
   }
 
   jwt.verify(token, config.JWT_SECRET as string, (error: any, decoded: any) => {
     if (error?.name === "TokenExpiredError") {
-      throw new AppError("Acesso expirado. Faça login novamente.", 401)
+      return next(new AppError("Acesso expirado. Faça login novamente.", 401))
     }
 
     if (error) {
-      throw new AppError("Acesso negado! Faça login para ter acesso. Entre em contato com o suporte se for um erro.", 401)
+      return next(new AppError("Acesso negado! Faça login para ter acesso. Entre em contato com o suporte se for um erro.", 401))
     }
 
     if (!decoded) {
-      throw new AppError("Acesso negado! Faça login para ter acesso.", 401)
+      return next(new AppError("Acesso negado! Faça login para ter acesso.", 401))
     }
 
     // TODO: Correct error

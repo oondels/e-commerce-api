@@ -29,7 +29,7 @@ app.use(cookieParser())
 app.use("/api/products/", productRoute)
 app.use("/api/users/", userRoute)
 app.use("/api/auth/", authRoute)
-app.use("/api/orders", orderRoute)
+app.use("/api/orders/", orderRoute)
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: "Ecommerce api running!" })

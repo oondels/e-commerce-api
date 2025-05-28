@@ -3,6 +3,7 @@ import { User } from "../models/User";
 import { Repository } from "typeorm";
 import { AppError } from "../../../util/AppError";
 import bcrypt from "bcrypt"
+import { UserResponseDTO } from "../dtos/user-response.dto";
 
 export class UserService {
   private userRepository: Repository<User>;
@@ -37,5 +38,17 @@ export class UserService {
       console.error("Erro ao criar usuário: ", error);
       throw new AppError("Erro ao criar usuário");
     }
+  }
+
+  async getUserById(id: string): Promise<UserResponseDTO> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      select: ["addressLine1", "addressLine2", "postalCode", "name", "username", "email", "phone", "cpf", "city", "state", "country", "birth", "profilePicture"]
+    })
+    if (!user) {
+      throw new AppError("Usuário não encontrado. Entre em contato com o suporte para resolvermos esse problema o mais rápido possível!", 404)
+    }
+
+    return UserResponseDTO.fromEntity(user);
   }
 }

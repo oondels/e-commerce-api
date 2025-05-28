@@ -57,6 +57,12 @@ export class User {
   @Column({ nullable: true })
   country?: string
 
+  @Column({ nullable: true })
+  birth?: Date
+
+  @Column({ nullable: true })
+  profilePicture?: string
+
   @Column({ type: 'varchar', nullable: true })
   refreshToken?: string
 

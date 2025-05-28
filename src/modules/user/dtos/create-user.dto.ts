@@ -34,6 +34,7 @@ export const userSchema = Joi.object({
   state: Joi.string().optional(),
   postalCode: Joi.string().optional(),
   country: Joi.string().optional(),
-
+  birth: Joi.date().optional(),
+  profilePicture: Joi.string().optional(),
   refreshToken: Joi.string().optional()
 });
