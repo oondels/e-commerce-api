@@ -8,7 +8,7 @@ import { orderRoute } from "./modules/orders/orders.route";
 import cookieParser from "cookie-parser"
 import logger from "./util/logger"
 import { connectRedis } from "./config/redisCLient"
-// import cors from "cors"
+import cors from "cors"
 
 AppDataSource.initialize()
   .then(() => {
@@ -23,7 +23,7 @@ AppDataSource.initialize()
 const app = express()
 const port = 2321
 
-// app.use(cors())
+app.use(cors({ origin: ['http://localhost:5173'], credentials: true }))
 app.use(express.json())
 app.use(cookieParser())
 app.use("/api/products/", productRoute)
@@ -48,7 +48,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 
   // Unexpected Errors
   console.error(`Erro no metodo ${req.method} na rota ${req.originalUrl}:`);
-  
+
   res.status(500).json({
     message: "Erro interno no servidor. Contate a equipe de suporte.",
     error: process.env.NODE_ENV === "development" ? error.message : undefined

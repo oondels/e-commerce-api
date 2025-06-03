@@ -7,14 +7,14 @@ const authService = new AuthService()
 
 export class AuthController {
   static async login(req: Request, res: Response, next: NextFunction) {
-    const { username, email, password } = req.body
+    const { emailUser, password } = req.body
 
-    if (!password || (!email && !username)) {
+    if (!password || !emailUser) {
       res.status(400).json({ message: "Todos os campos são obrigatórios." })
       return
     }
 
-    const { token, refreshToken } = await authService.loginUser(username, email, password)
+    const { token, refreshToken, user } = await authService.loginUser(emailUser, password)
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -29,21 +29,18 @@ export class AuthController {
       maxAge: 60 * 60 * 24 * 7
     })
 
-    res.status(200).json({ message: "Login realizado com sucesso." })
+    res.status(200).json({ message: "Login realizado com sucesso.", token })
   }
 
   static async logout(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.cookies
-    if (!refreshToken) {
-      res.status(403).json({ message: "Credenciais inválidas." })
-      return
-    }
 
     try {
-      const payload = await authService.verifyRefreshToken(refreshToken)
-
-      // Add the token to the blacklist
-      await authService.addTokenToBlacklist(payload)
+      if (refreshToken) {
+        const payload = await authService.verifyRefreshToken(refreshToken)
+        // Add the token to the blacklist
+        await authService.addTokenToBlacklist(payload)
+      }
 
       res.clearCookie("token")
       res.clearCookie("refreshToken")
