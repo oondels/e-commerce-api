@@ -1,0 +1,10 @@
+services:
+  ecommerce-store:
+    build: .
+    container_name: ecommerce-store
+    ports:
+      - "2321:2321"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
