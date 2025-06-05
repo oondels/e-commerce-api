@@ -2,9 +2,38 @@ services:
   ecommerce-store:
     build: .
     container_name: ecommerce-store
-    ports:
-      - "2321:2321"
     env_file:
       - .env.production
     environment:
       - NODE_ENV=production
+    networks:
+      - backend-store
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    depends_on:
+      - ecommerce-store
+    networks:
+      - backend-store
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot --webroot-path /var/www/certbot --quiet; sleep 12h & wait $${!}; done'"
+    networks:
+      - backend-store
+
+networks:
+  backend-store:
+    driver: bridge
